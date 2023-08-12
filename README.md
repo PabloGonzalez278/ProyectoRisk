@@ -7,5 +7,10 @@ Integrantes del grupo: <p>
 Estudiantes de Ingenieria de Sistemas
 
 # Comandos de Compilacion
-*  _g++ -std=c++11 -o entrega0  main.cpp_ <p>
-* _y ./entrega0_  <p>
+*  <h2> g++ -std=c++11 -o entrega0  main.cpp_ </h2> <p>
+# Comandos de Ejecucion
+* <h2> ./entrega0  </h2> <p>
+* <h2> Inicializar </h2> <p>
+* <h2> CargarPartida </h2> <p>
+* <h2> Ayuda </h2> <p>
+* <h2> Salir </h2> <p>
