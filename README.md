@@ -11,6 +11,11 @@ Estudiantes de Ingenieria de Sistemas
 # Comandos de Ejecucion
 * <h2> ./entrega0  </h2> <p>
 * <h2> Inicializar </h2> <p>
+* <h2> Turno       </h2> <p>
+* <h2> Guardar      </h2> <p>
+* <h2> Guardar_comprimido  </h2> <p>
+* <h2> Conquista_mas_barata </h2> <p>
+* <h2> Costo_conquista </h2> <p>
 * <h2> CargarPartida </h2> <p>
 * <h2> Ayuda </h2> <p>
 * <h2> Salir </h2> <p>
