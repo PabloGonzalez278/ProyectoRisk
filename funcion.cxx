@@ -2,50 +2,35 @@
 #include <iostream>
 #include <sstream>
 #include "colors.h"
+#include "juego/elementos-juego.h"
+#include "juego/elementos-partida.h"
 
+#include <string>
+#include <iostream>
+#include <queue>
 
 // Definición de TADs
 
-struct Territorio {
-    int identificador;
-    std::string nombre;
-};
+
 
 struct Dado {
     int numero;
 };
 
-struct Ejercito {
-    std::string tipo;
-    std::string color;
-};
 
 struct Tarjeta {
     std::string tipo;
     std::string dibujo;
 };
 
-struct Jugador {
-    int id;
-    std::string nombre;
-    std::vector<Territorio> territorios;
-    std::vector<Ejercito> unidades;
-    int numeroUni;
-    std::string color;
-    std::vector<Tarjeta> tarjetas;
-    int numtarjetas;
-};
 
-struct Continente {
-    std::string nombre;
-    Jugador *jugador;
-};
+
 
 struct EstadoJuego {
     bool juegoInicializado = false;
     bool juegoTerminado = false;
     int turnoActual = 1;
-    std::vector<Jugador> jugadores;
+    std::vector<Jugador> Jugadores;
 };
 
 // Funciones para el Componente 1
@@ -53,38 +38,52 @@ struct EstadoJuego {
 void DistribuirUnidades(EstadoJuego &estado) {
 }
 
-void ObtenerUnidades(Jugador &jugador) {
+void ObtenerUnidades(Jugador &Jugador) {
 }
 
-void RealizarAtaques(EstadoJuego &estado, Jugador &jugador) {
+void RealizarAtaques(EstadoJuego &estado, Jugador &Jugador) {
 }
 
-void FortificarTerritorios(Jugador &jugador) {
+void FortificarTerritorios(Jugador &Jugador) {
 }
 
-void InicializarJuego(EstadoJuego &estado) {
+Partida InicializarJuego(EstadoJuego &estado) {
     // Verifica si el juego ya ha sido inicializado previamente
     if (estado.juegoInicializado) {
         std::cout << "El juego ya ha sido inicializado." << std::endl;
         return;
     }
 
-    // Solicita al usuario la cantidad de jugadores para esta partida
+    // Crea una nueva partida
+    Partida nuevaPartida = Partida();
+    
+    // Solicita al usuario la cantidad de Jugadores para esta partida
     int numJugadores;
-    std::cout << "Ingrese la cantidad de jugadores: ";
+    std::queue<Jugador> jugadores;
+    std::cout << "Ingrese la cantidad de Jugadores: ";
     std::cin >> numJugadores;
 
-    // Para cada jugador, solicita su nombre y lo agrega al estado del juego
+    // Para cada Jugador, solicita su nombre y lo agrega al estado del juego
     for (int i = 1; i <= numJugadores; ++i) {
         Jugador jugador;
-        jugador.id = i;
-        std::cout << "Ingrese el nombre del jugador " << i << ": ";
-        std::cin >> jugador.nombre;
-        estado.jugadores.push_back(jugador);
+        std::string nombreJugador;
+        std::string colorJugador;
+        jugador.setId(i);
+        std::cout << "Ingrese el nombre del Jugador " << i << ": ";
+        std::cin >> nombreJugador;
+        std::cout << "Ingrese el color del Jugador " << i << ": ";
+        std::cin >> colorJugador;
+        jugador.setNombre(nombreJugador);
+        jugador.setColor(colorJugador);
+        jugadores.push(jugador);
     }
 
-    // Asigna unidades iniciales a los territorios de los jugadores
-    DistribuirUnidades(estado);
+    nuevaPartida.setJugadores(jugadores);
+
+    // Partida crea un nuevo tablero y lo asigna a la partida
+
+    nuevaPartida.crearTablero();
+
 
     // Marca el juego como inicializado y muestra un mensaje de éxito
     estado.juegoInicializado = true;
@@ -99,18 +98,18 @@ void RealizarTurno(EstadoJuego &estado, int idJugador) {
         return;
     }
 
-    // Busca al jugador actual en el estado del juego
-    Jugador *jugadorActual = nullptr;
-    for (Jugador &jugador : estado.jugadores) {
-        if (jugador.id == idJugador) {
-            jugadorActual = &jugador;
+    // Busca al Jugador actual en el estado del juego
+    Jugador *JugadorActual = nullptr;
+    for (Jugador &Jugador : estado.Jugadores) {
+        if (Jugador.getId() == idJugador) {
+            JugadorActual = &Jugador;
             break;
         }
     }
 
-    // Verifica si el jugador actual existe en la partida
-    if (!jugadorActual) {
-        std::cout << "El jugador " << idJugador << " no forma parte de esta partida." << std::endl;
+    // Verifica si el Jugador actual existe en la partida
+    if (!JugadorActual) {
+        std::cout << "El Jugador " << idJugador << " no forma parte de esta partida." << std::endl;
         return;
     }
 
@@ -120,26 +119,26 @@ void RealizarTurno(EstadoJuego &estado, int idJugador) {
         return;
     }
 
-    // Verifica si es el turno del jugador actual
+    // Verifica si es el turno del Jugador actual
     if (idJugador != estado.turnoActual) {
-        std::cout << "No es el turno del jugador " << idJugador << "." << std::endl;
+        std::cout << "No es el turno del Jugador " << idJugador << "." << std::endl;
         return;
     }
 
-    // Calcula y asigna las unidades adicionales al jugador actual
-    ObtenerUnidades(*jugadorActual);
+    // Calcula y asigna las unidades adicionales al Jugador actual
+    ObtenerUnidades(*JugadorActual);
 
     // Realiza los ataques y actualiza el estado del juego
-    RealizarAtaques(estado, *jugadorActual);
+    RealizarAtaques(estado, *JugadorActual);
 
-    // Permite al jugador fortificar sus territorios
-    FortificarTerritorios(*jugadorActual);
+    // Permite al Jugador fortificar sus territorios
+    FortificarTerritorios(*JugadorActual);
 
-    // Actualiza el turno para el próximo jugador
-    estado.turnoActual = (estado.turnoActual % estado.jugadores.size()) + 1;
+    // Actualiza el turno para el próximo Jugador
+    estado.turnoActual = (estado.turnoActual % estado.Jugadores.size()) + 1;
 
     // Muestra un mensaje indicando que el turno ha terminado
-    std::cout << "Turno del jugador " << idJugador << " terminado." << std::endl;
+    std::cout << "Turno del Jugador " << idJugador << " terminado." << std::endl;
 }
 
 
@@ -220,7 +219,7 @@ void ejecutarInterfaz() {
             InicializarJuego(estado); // Llama a la función para inicializar el juego
         } else if (comando == "Turno") { // Comando para realizar un turno
             int idJugador;
-            std::cout << "Ingrese el ID del jugador: ";
+            std::cout << "Ingrese el ID del Jugador: ";
             std::cin >> idJugador;
             RealizarTurno(estado, idJugador); // Llama a la función para realizar el turno
         }else if (comando == "Guardar") { // Comando para guardar la partida en archivo de texto

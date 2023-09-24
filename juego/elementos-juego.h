@@ -5,107 +5,108 @@
 
 #include <string>
 
-template <class T>
+
 class Unidad {
     public:
         Unidad();
-        Unidad(std::string tipoUnidad, std::string color, T valorUnidad);
+        Unidad(std::string tipoUnidad, std::string color, int valorUnidad);
         std::string getTipoUnidad();
         std::string getColor();
-        T getValorUnidad();
+        int getValorUnidad();
         void setTipoUnidad(std::string tipoUnidad);
         void setColor(std::string color);
-        void setValorUnidad(T valorUnidad);
+        void setValorUnidad(int valorUnidad);
     private:
         std::string tipoUnidad;
         std::string color;
-        T valorUnidad
+        int valorUnidad;
 };
 
-template <class T>
-class jugador {
+
+class Jugador {
     public:
-        jugador();
-        jugador(std::string nombre, std::string color, int id, int numUnidades, std::vector<Unidad> unidades, std::list<Unidad> tarjetas, std::list<T> territorios, int numTarjetas, int numConquistas);
+        Jugador();
+        Jugador(std::string nombre, std::string color, int id, int numUnidades, std::vector<Unidad> unidades, std::vector<Unidad> tarjetas, std::vector<Territorio> Territorios, int numTarjetas, int numConquistas);
         std::string getNombre();
         std::string getColor();
         int getId();
         int getNumUnidades();
-        std::list<Unidad> getUnidades();
-        std::list<tarjetas> getTarjetas();
-        std::list<territorio> getTerritorios();
+        std::vector<Unidad> getUnidades();
+        std::vector<Tarjeta> getTarjetas();
+        std::vector<Territorio> getTerritorios();
         int getNumTarjetas();
         int getNumConquistas();
         void setNombre(std::string nombre);
         void setColor(std::string color);
         void setId(int id);
         void setNumUnidades(int numUnidades);
-        void setUnidades(std::list<Unidad> unidades);
-        void setTarjetas(std::list<Unidad> tarjetas);
-        void setTerritorios(std::list<T> territorios);
+        void setUnidades(std::vector<Unidad> unidades);
+        void setTarjetas(std::vector<Unidad> tarjetas);
+        void setTerritorios(std::vector<Territorio> Territorios);
         void setNumTarjetas(int numTarjetas);
         void setNumConquistas(int numConquistas);
         void infoJugador();
         int reclamables();
-        void reclamar(territorio territorio);
+        void reclamar(Territorio territorio);
         void restarUnidad();
         void agregarUnidad(Unidad unidad);
-        tarjetas ObtenerTarjetasTerritorio();
-        tarjetas ObtenerTarjetasUnidad();
+        Tarjeta ObtenerTarjetasTerritorio();
+        Tarjeta ObtenerTarjetasUnidad();
     private:
         std::string nombre;
         std::string color;
         int id;
         int numUnidades;
-        std::list<tarjetas> unidades;
-        std::list<Unidad> tarjetas;
-        std::list<territorio> territorios;
+        std::vector<Tarjeta> unidades;
+        std::vector<Unidad> tarjetas;
+        std::vector<Territorio> Territorios;
         int numTarjetas;
         int numConquistas;
 };
 
-template <class T>
-class territorio {
+
+class Territorio {
     public:
-        territorio();
-        territorio(std::string nombre, std::string continente, int id, int numUnidades);
+        Territorio();
+        Territorio(std::string nombre, std::string continente, int id, int numUnidades);
         std::string getNombre();
         std::string getContinente();
-        std::list<territorio> getVecinos();
+        std::vector<Territorio> getVecinos();
         int getId();
         int getNumUnidades();
         void setNombre(std::string nombre);
         void setContinente(std::string continente);
-        void setVecinos(std::list<territorio> vecinos);
+        void setVecinos(std::vector<Territorio> vecinos);
         void setId(int id);
-        void setNumUnidades(int numUnidades)
+        void setNumUnidades(int numUnidades);
         void restarUnidad(int numUnidades);
         void agregarUnidad(int numUnidades);
 
     private:
         std::string nombre;
         std::string continente;
-        std::list::<territorio> vecinos;
+        std::vector<Territorio> vecinos;
         int id;
         int numUnidades;
 };
 
-template <class T>
-class tarjetas {
+
+class Tarjeta {
     public:
-        tarjetas();
-        tarjetas(std::string tipo, std::string territorio, std::string unidad);
+        Tarjeta();
+        Tarjeta(std::string tipo, std::string Territorio, std::string unidad);
         std::string getTipo();
         std::string getTerritorio();
         std::string getUnidad();
         void setTipo(std::string tipo);
-        void setTerritorio(std::string territorio);
+        void setTerritorio(std::string Territorio);
         void setUnidad(std::string unidad);
     private:
         std::string tipo;
-        std::string territorio;
+        std::string Territorio;
         std::string unidad;
 };
 
+#include "elementos-juego.hxx"
 
 #endif // ELEMENTOS_JUEGO_H
