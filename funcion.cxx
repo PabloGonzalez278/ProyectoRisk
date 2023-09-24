@@ -9,19 +9,6 @@
 #include <iostream>
 #include <queue>
 
-// Definición de TADs
-
-
-
-struct Dado {
-    int numero;
-};
-
-
-struct Tarjeta {
-    std::string tipo;
-    std::string dibujo;
-};
 
 
 
@@ -30,7 +17,6 @@ struct EstadoJuego {
     bool juegoInicializado = false;
     bool juegoTerminado = false;
     int turnoActual = 1;
-    std::vector<Jugador> Jugadores;
 };
 
 // Funciones para el Componente 1
@@ -47,6 +33,13 @@ void RealizarAtaques(EstadoJuego &estado, Jugador &Jugador) {
 void FortificarTerritorios(Jugador &Jugador) {
 }
 
+
+
+
+
+
+
+
 Partida InicializarJuego(EstadoJuego &estado) {
     // Verifica si el juego ya ha sido inicializado previamente
     if (estado.juegoInicializado) {
@@ -57,11 +50,15 @@ Partida InicializarJuego(EstadoJuego &estado) {
     // Crea una nueva partida
     Partida nuevaPartida = Partida();
     
+
+
     // Solicita al usuario la cantidad de Jugadores para esta partida
     int numJugadores;
     std::queue<Jugador> jugadores;
     std::cout << "Ingrese la cantidad de Jugadores: ";
     std::cin >> numJugadores;
+
+
 
     // Para cada Jugador, solicita su nombre y lo agrega al estado del juego
     for (int i = 1; i <= numJugadores; ++i) {
@@ -78,17 +75,46 @@ Partida InicializarJuego(EstadoJuego &estado) {
         jugadores.push(jugador);
     }
 
+    // Asigna los Jugadores al estado del juego
+
     nuevaPartida.setJugadores(jugadores);
 
     // Partida crea un nuevo tablero y lo asigna a la partida
 
     nuevaPartida.crearTablero();
 
+    // crea las unidades y las tarjetas y las asigna al tablero
+
+    nuevaPartida.getTablero().crearUnidades();
+    nuevaPartida.getTablero().crearTarjetas();
+
+    //asigna a los jugadores las unidades y las tarjetas
+
+    nuevaPartida.repartirElementos();
 
     // Marca el juego como inicializado y muestra un mensaje de éxito
+
+    bool inicio = nuevaPartida.iniciarPartida();
+    if (inicio == true){
     estado.juegoInicializado = true;
     std::cout << "Inicialización satisfactoria. El juego está listo para comenzar." << std::endl;
+    return nuevaPartida;
+    } else {
+    std::cout << "Inicialización fallida. El juego no está listo para comenzar." << std::endl;
+    }
+
+    // Marca el juego como inicializado y muestra un mensaje de éxito
+    
 }
+
+
+
+
+
+
+
+
+
 
 
 void RealizarTurno(EstadoJuego &estado, int idJugador) {
@@ -140,6 +166,14 @@ void RealizarTurno(EstadoJuego &estado, int idJugador) {
     // Muestra un mensaje indicando que el turno ha terminado
     std::cout << "Turno del Jugador " << idJugador << " terminado." << std::endl;
 }
+
+
+
+
+
+
+
+
 
 
 //Implementacion de la funcion para ejecutar el comando de ayuda
@@ -241,3 +275,7 @@ void ejecutarInterfaz() {
         }
     }
 }
+
+
+
+//Guardado de partida en archivo de texto
