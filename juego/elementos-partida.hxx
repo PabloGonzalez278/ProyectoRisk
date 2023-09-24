@@ -127,7 +127,9 @@ void Tablero::setUnidadesCaballeria(std::vector<Unidad> unidades) {
 }
 
 void Tablero::crearUnidades() {
-    std::vector<Unidad> unidades = {};
+    std::vector<Unidad> unidadesInfanteria = {};
+    std::vector<Unidad> unidadesArtilleria = {};
+    std::vector<Unidad> unidadesCaballeria = {};
 
     // habran 6 ciclo for, uno por cada color de unidad
     // cada ciclo for creara 3 unidades del mismo color
@@ -139,11 +141,121 @@ void Tablero::crearUnidades() {
     //6 de caballeria
     //2 de artilleria
 
-    for (size_t i = 0; i < 19; i++)
+    for (size_t i = 0; i <= 17; i++)
     {
         Unidad unidad = Unidad("Infanteria", "Rojo", 1);
-        unidades.push_back(unidad);
+        unidadesInfanteria.push_back(unidad);
+
+        if (i<=7)
+        {
+            unidad = Unidad("Caballeria", "Rojo", 5);
+            unidadesCaballeria.push_back(unidad);
+        }
+
+        if (i<=1)
+        {
+            unidad = Unidad("Artilleria", "Rojo", 10);
+            unidadesArtilleria.push_back(unidad);
+        }
+        
     }
+
+    for (size_t i = 0; i <= 17; i++)
+    {
+        Unidad unidad = Unidad("Infanteria", "Azul", 1);
+        unidadesInfanteria.push_back(unidad);
+
+        if (i<=7)
+        {
+            unidad = Unidad("Caballeria", "Azul", 5);
+            unidadesCaballeria.push_back(unidad);
+        }
+
+        if (i<=1)
+        {
+            unidad = Unidad("Artilleria", "Azul", 10);
+            unidadesArtilleria.push_back(unidad);
+        }
+        
+    }
+
+    for (size_t i = 0; i <= 17; i++)
+    {
+        Unidad unidad = Unidad("Infanteria", "Amarillo", 1);
+        unidadesInfanteria.push_back(unidad);
+
+        if (i<=7)
+        {
+            unidad = Unidad("Caballeria", "Amarillo", 5);
+            unidadesCaballeria.push_back(unidad);
+        }
+
+        if (i<=1)
+        {
+            unidad = Unidad("Artilleria", "Amarillo", 10);
+            unidadesArtilleria.push_back(unidad);
+        }
+        
+    }
+
+    for (size_t i = 0; i <= 17; i++)
+    {
+        Unidad unidad = Unidad("Infanteria", "Verde", 1);
+        unidadesInfanteria.push_back(unidad);
+
+        if (i<=7)
+        {
+            unidad = Unidad("Caballeria", "Verde", 5);
+            unidadesCaballeria.push_back(unidad);
+        }
+
+        if (i<=1)
+        {
+            unidad = Unidad("Artilleria", "Verde", 10);
+            unidadesArtilleria.push_back(unidad);
+        }
+        
+    }
+
+    for (size_t i = 0; i <= 17; i++)
+    {
+        Unidad unidad = Unidad("Infanteria", "Morado", 1);
+        unidadesInfanteria.push_back(unidad);
+
+        if (i<=7)
+        {
+            unidad = Unidad("Caballeria", "Morado", 5);
+            unidadesCaballeria.push_back(unidad);
+        }
+
+        if (i<=1)
+        {
+            unidad = Unidad("Artilleria", "Morado", 10);
+            unidadesArtilleria.push_back(unidad);
+        }
+        
+    }
+
+    for (size_t i = 0; i <= 17; i++)
+    {
+        Unidad unidad = Unidad("Infanteria", "Cafe", 1);
+        unidadesInfanteria.push_back(unidad);
+
+        if (i<=7)
+        {
+            unidad = Unidad("Caballeria", "Cafe", 5);
+            unidadesCaballeria.push_back(unidad);
+        }
+
+        if (i<=1)
+        {
+            unidad = Unidad("Artilleria", "Cafe", 10);
+            unidadesArtilleria.push_back(unidad);
+        }
+        
+    }
+
+
     
 }
 

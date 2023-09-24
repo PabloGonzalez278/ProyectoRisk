@@ -44,7 +44,7 @@ class Tablero{
     std::vector<Unidad> unidadesCaballeria;
     public:
     Tablero();
-    Tablero(std::vector<Territorio> Territorios, Partida partida, std::vector<Tarjeta> Tarjetas, std::vector<Unidad> unidades);
+    Tablero(std::vector<Territorio> Territorios, Partida partida, std::vector<Tarjeta> Tarjetas, std::vector<Unidad> unidadesInfanteria, std::vector<Unidad> unidadesArtilleria, std::vector<Unidad> unidadesCaballeria);
     std::vector<Territorio> getTerritorios();
     std::vector<Tarjeta> getTarjetas();
     std::vector<Unidad> getUnidadesInfanteria();
