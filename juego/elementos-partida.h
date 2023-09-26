@@ -56,7 +56,8 @@ class Tablero{
     void setUnidadesArtilleria(std::vector<Unidad> unidades);
     void setUnidadesCaballeria(std::vector<Unidad> unidades);
     void crearUnidades();
-    void crearTarjetas();
+    void crearTarjetas(std::vector<Territorio> territorios);
+    void crearTerritorios();
 
 };
 

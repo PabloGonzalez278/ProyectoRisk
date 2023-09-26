@@ -26,7 +26,7 @@ class Unidad {
 class Jugador {
     public:
         Jugador();
-        Jugador(std::string nombre, std::string color, int id, int numUnidades, std::vector<Unidad> unidades, std::vector<Unidad> tarjetas, std::vector<Territorio> Territorios, int numTarjetas, int numConquistas);
+        Jugador(std::string nombre, std::string color, int id, int numUnidades, std::vector<Unidad> unidades, std::vector<Tarjeta> tarjetas, std::vector<Territorio> Territorios, int numTarjetas, int numConquistas);
         std::string getNombre();
         std::string getColor();
         int getId();
@@ -41,7 +41,7 @@ class Jugador {
         void setId(int id);
         void setNumUnidades(int numUnidades);
         void setUnidades(std::vector<Unidad> unidades);
-        void setTarjetas(std::vector<Unidad> tarjetas);
+        void setTarjetas(std::vector<Tarjeta> tarjetas);
         void setTerritorios(std::vector<Territorio> Territorios);
         void setNumTarjetas(int numTarjetas);
         void setNumConquistas(int numConquistas);
@@ -57,8 +57,8 @@ class Jugador {
         std::string color;
         int id;
         int numUnidades;
-        std::vector<Tarjeta> unidades;
-        std::vector<Unidad> tarjetas;
+        std::vector<Unidad> unidades;
+        std::vector<Tarjeta> tarjetas;
         std::vector<Territorio> Territorios;
         int numTarjetas;
         int numConquistas;
