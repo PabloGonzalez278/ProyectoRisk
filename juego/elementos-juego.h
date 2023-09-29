@@ -39,11 +39,11 @@ class Jugador {
         void setNombre(std::string nombre);
         void setColor(std::string color);
         void setId(int id);
-        void setNumUnidades(int numUnidades);
+        void setNumUnidades();
         void setUnidades(std::vector<Unidad> unidades);
         void setTarjetas(std::vector<Tarjeta> tarjetas);
         void setTerritorios(std::vector<Territorio> Territorios);
-        void setNumTarjetas(int numTarjetas);
+        void setNumTarjetas();
         void setNumConquistas(int numConquistas);
         void infoJugador();
         int reclamables();

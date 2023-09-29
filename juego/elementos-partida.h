@@ -20,7 +20,7 @@ class Partida {
     int getCantJugadores();
     std::queue<Jugador> getJugadores();
     Turno getTurno();
-    void setCantJugadores(int cantJugadores);
+    void setCantJugadores();
     void setJugadores(std::queue<Jugador> Jugadores);
     void setTurno(Turno turno);
     void guardarPartida();

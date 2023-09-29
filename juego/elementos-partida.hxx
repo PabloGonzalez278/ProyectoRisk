@@ -27,7 +27,8 @@ Turno Partida::getTurno() {
     return this->turno;
 }
 
-void Partida::setCantJugadores(int cantJugadores) {
+void Partida::setCantJugadores() {
+    cantJugadores = Jugadores.size();
     this->cantJugadores = cantJugadores;
 }
 
@@ -66,6 +67,113 @@ bool Partida::ganador() {
 bool Partida::terminarPartida(Jugador Jugador) {
 }
 
+void Partida::repartirElementos(){
+    //reparte las unidades, las tarjetas y los territorios a los jugadores
+
+    //reparte los territorios
+
+    int numJugagores = getCantJugadores();
+
+    int numTerritorios = getTablero().getTerritorios().size();
+
+    int numTerritoriosPorJugador = numTerritorios/numJugagores;
+
+    std::vector<Territorio> territorios = getTablero().getTerritorios();
+
+    std::queue<Jugador> jugadoresAux = getJugadores();
+
+    for (size_t i = 0; i < numTerritorios; i++)
+    {
+        int numJugador = i%numJugagores;
+
+        Jugador jugador = jugadoresAux.front();
+
+        jugadoresAux.pop();
+
+        jugador.reclamar(territorios[i]);
+
+        jugadoresAux.push(jugador);
+    }
+
+    //reparte las unidades
+
+    //si hay 6 jugador, cada jugador recibe 20 unidades
+    //si hay 5 jugadores, cada jugador recibe 25 unidades
+    //si hay 4 jugadores, cada jugador recibe 30 unidades
+    //si hay 3 jugadores, cada jugador recibe 35 unidades
+    //si hay 2 jugadores, cada jugador recibe 40 unidades
+
+   
+
+    int numUnidadesPorJugador = 0;
+
+    if (numJugagores == 6)
+    {
+        numUnidadesPorJugador = 20;
+    }
+
+    if (numJugagores == 5)
+    {
+        numUnidadesPorJugador = 25;
+    }
+
+    if (numJugagores == 4)
+    {
+        numUnidadesPorJugador = 30;
+    }
+
+    if (numJugagores == 3)
+    {
+        numUnidadesPorJugador = 35;
+    }
+
+    if (numJugagores == 2)
+    {
+        numUnidadesPorJugador = 40;
+    }
+
+    while (!jugadoresAux.empty())
+    {
+        Jugador jugador = jugadoresAux.front();
+
+        jugadoresAux.pop();
+
+        int numUnidades = jugador.getNumUnidades();
+
+        while (numUnidades != numUnidadesPorJugador)
+        {
+                // Agregar unidades de acuerdo al numero de jugadores
+                // en una partida de 6 jugadores cada uno recibe 5 infanterias, 1 caballerias y 1 artillerias
+                // en una partida de 5 jugadores cada uno recibe 5 infanterias, 2 caballerias y 1 artillerias
+                // en una partida de 4 jugadores cada uno recibe 5 infanterias, 3 caballerias y 1 artillerias
+                // en una partida de 3 jugadores cada uno recibe 5 infanterias, 2 caballerias y 2 artillerias
+                // en una partida de 2 jugadores cada uno recibe 5 infanterias, 3 caballerias y 2 artillerias
+
+            
+        }
+        
+
+        jugadoresAux.push(jugador);
+    }
+    {
+        
+    }
+
+}
+
+bool Partida::iniciarPartida() {
+
+    this->turno = Turno();
+    this->turno.setNumTurno(1);
+    this->turno.setJugador(this->Jugadores.front());
+    this->Jugadores.pop();
+    this->turno.setDefensor(this->Jugadores.front());
+    this->Jugadores.push(this->turno.getJugador());
+
+    this->turno.iniciarTurno();
+
+    return true;
+}
 
 
 //Tablero
@@ -137,122 +245,71 @@ void Tablero::crearUnidades() {
 
     //En total habran 18 unidades por cada color de unidad
     //En total habran 108 unidades
-    //10 de infanteria
-    //6 de caballeria
-    //2 de artilleria
+    //20 de infanteria
+    //20 de caballeria
+    //20 de artilleria
 
-    for (size_t i = 0; i <= 17; i++)
+    for (size_t i = 0; i < 20; i++)
     {
         Unidad unidad = Unidad("Infanteria", "Rojo", 1);
         unidadesInfanteria.push_back(unidad);
 
-        if (i<=7)
-        {
-            unidad = Unidad("Caballeria", "Rojo", 5);
-            unidadesCaballeria.push_back(unidad);
-        }
-
-        if (i<=1)
-        {
-            unidad = Unidad("Artilleria", "Rojo", 10);
-            unidadesArtilleria.push_back(unidad);
-        }
-        
-    }
-
-    for (size_t i = 0; i <= 17; i++)
-    {
         Unidad unidad = Unidad("Infanteria", "Azul", 1);
         unidadesInfanteria.push_back(unidad);
 
-        if (i<=7)
-        {
-            unidad = Unidad("Caballeria", "Azul", 5);
-            unidadesCaballeria.push_back(unidad);
-        }
-
-        if (i<=1)
-        {
-            unidad = Unidad("Artilleria", "Azul", 10);
-            unidadesArtilleria.push_back(unidad);
-        }
-        
-    }
-
-    for (size_t i = 0; i <= 17; i++)
-    {
         Unidad unidad = Unidad("Infanteria", "Amarillo", 1);
         unidadesInfanteria.push_back(unidad);
 
-        if (i<=7)
-        {
-            unidad = Unidad("Caballeria", "Amarillo", 5);
-            unidadesCaballeria.push_back(unidad);
-        }
-
-        if (i<=1)
-        {
-            unidad = Unidad("Artilleria", "Amarillo", 10);
-            unidadesArtilleria.push_back(unidad);
-        }
-        
-    }
-
-    for (size_t i = 0; i <= 17; i++)
-    {
         Unidad unidad = Unidad("Infanteria", "Verde", 1);
         unidadesInfanteria.push_back(unidad);
 
-        if (i<=7)
-        {
-            unidad = Unidad("Caballeria", "Verde", 5);
-            unidadesCaballeria.push_back(unidad);
-        }
-
-        if (i<=1)
-        {
-            unidad = Unidad("Artilleria", "Verde", 10);
-            unidadesArtilleria.push_back(unidad);
-        }
-        
-    }
-
-    for (size_t i = 0; i <= 17; i++)
-    {
         Unidad unidad = Unidad("Infanteria", "Morado", 1);
         unidadesInfanteria.push_back(unidad);
 
-        if (i<=7)
-        {
-            unidad = Unidad("Caballeria", "Morado", 5);
-            unidadesCaballeria.push_back(unidad);
-        }
-
-        if (i<=1)
-        {
-            unidad = Unidad("Artilleria", "Morado", 10);
-            unidadesArtilleria.push_back(unidad);
-        }
-        
-    }
-
-    for (size_t i = 0; i <= 17; i++)
-    {
         Unidad unidad = Unidad("Infanteria", "Cafe", 1);
         unidadesInfanteria.push_back(unidad);
 
-        if (i<=7)
-        {
-            unidad = Unidad("Caballeria", "Cafe", 5);
-            unidadesCaballeria.push_back(unidad);
-        }
 
-        if (i<=1)
-        {
-            unidad = Unidad("Artilleria", "Cafe", 10);
-            unidadesArtilleria.push_back(unidad);
-        }
+
+      
+        unidad = Unidad("Caballeria", "Rojo", 5);
+        unidadesCaballeria.push_back(unidad);
         
+        unidad = Unidad("Caballeria", "Azul", 5);
+        unidadesCaballeria.push_back(unidad);
+
+        unidad = Unidad("Caballeria", "Amarillo", 5);
+        unidadesCaballeria.push_back(unidad);
+
+        unidad = Unidad("Caballeria", "Verde", 5);
+        unidadesCaballeria.push_back(unidad);
+
+        unidad = Unidad("Caballeria", "Morado", 5);
+        unidadesCaballeria.push_back(unidad);
+
+        unidad = Unidad("Caballeria", "Cafe", 5);
+        unidadesCaballeria.push_back(unidad);
+
+
+
+
+        unidad = Unidad("Artilleria", "Rojo", 10);
+        unidadesArtilleria.push_back(unidad);
+        
+        unidad = Unidad("Artilleria", "Azul", 10);
+        unidadesArtilleria.push_back(unidad);
+
+        unidad = Unidad("Artilleria", "Amarillo", 10);
+        unidadesArtilleria.push_back(unidad);
+
+        unidad = Unidad("Artilleria", "Verde", 10);
+        unidadesArtilleria.push_back(unidad);
+
+        unidad = Unidad("Artilleria", "Morado", 10);
+        unidadesArtilleria.push_back(unidad);
+
+        unidad = Unidad("Artilleria", "Cafe", 10);
+        unidadesArtilleria.push_back(unidad);
     }
 
 
@@ -357,7 +414,7 @@ void Tablero::crearTerritorios() {
         territorios.push_back(territorio);
         territorio = Territorio("Australia Oriental", "Oceania", 41, 0);
         territorios.push_back(territorio);
-        
+
 
         
 }

@@ -116,7 +116,8 @@ void Jugador::setId(int id) {
     this->id = id;
 }
 
-void Jugador::setNumUnidades(int numUnidades) {
+void Jugador::setNumUnidades() {
+    int numUnidades = unidades.size();
     this->numUnidades = numUnidades;
 }
 
@@ -132,7 +133,8 @@ void Jugador::setTerritorios(std::vector<Territorio> Territorios) {
     this->Territorios = Territorios;
 }
 
-void Jugador::setNumTarjetas(int numTarjetas) {
+void Jugador::setNumTarjetas() {
+    int numTarjetas = tarjetas.size();
     this->numTarjetas = numTarjetas;
 }
 
@@ -163,6 +165,9 @@ void Jugador::restarUnidad() {
 
 void Jugador::agregarUnidad(Unidad unidad) {
 
+    this->unidades.push_back(unidad);
+
+    this->numUnidades = this->numUnidades + unidad.getValorUnidad();
 }
 
 Tarjeta Jugador::ObtenerTarjetasTerritorio() {
