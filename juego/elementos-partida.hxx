@@ -80,19 +80,19 @@ void Partida::repartirElementos(){
 
     std::vector<Territorio> territorios = getTablero().getTerritorios();
 
-    std::queue<Jugador> jugadoresAux = getJugadores();
+
 
     for (size_t i = 0; i < numTerritorios; i++)
     {
         int numJugador = i%numJugagores;
 
-        Jugador jugador = jugadoresAux.front();
+        Jugador jugador = this->Jugadores.front();
 
-        jugadoresAux.pop();
+        this->Jugadores.pop();
 
         jugador.reclamar(territorios[i]);
 
-        jugadoresAux.push(jugador);
+        this->Jugadores.push(jugador);
     }
 
     //reparte las unidades
@@ -105,64 +105,94 @@ void Partida::repartirElementos(){
 
    
 
-    int numUnidadesPorJugador = 0;
+        
+    // Agregar unidades de acuerdo al numero de jugadores
+    // en una partida de 6 jugadores cada uno recibe 5 infanterias, 1 caballerias y 1 artillerias
+    // en una partida de 5 jugadores cada uno recibe 5 infanterias, 2 caballerias y 1 artillerias
+    // en una partida de 4 jugadores cada uno recibe 5 infanterias, 3 caballerias y 1 artillerias
+    // en una partida de 3 jugadores cada uno recibe 5 infanterias, 2 caballerias y 2 artillerias
+    // en una partida de 2 jugadores cada uno recibe 5 infanterias, 3 caballerias y 2 artillerias
+
+            
+    int infanteria = 0;
+    int caballeria = 0;
+    int artilleria = 0;
 
     if (numJugagores == 6)
     {
-        numUnidadesPorJugador = 20;
+        infanteria = 20;
+        caballeria = 1;
+        artilleria = 1;
     }
 
     if (numJugagores == 5)
     {
-        numUnidadesPorJugador = 25;
+        infanteria = 25;
+        caballeria = 2;
+        artilleria = 1;
     }
 
     if (numJugagores == 4)
     {
-        numUnidadesPorJugador = 30;
+        infanteria = 30;
+        caballeria = 3;
+        artilleria = 1;
     }
 
     if (numJugagores == 3)
     {
-        numUnidadesPorJugador = 35;
+        infanteria = 35;
+        caballeria = 2;
+        artilleria = 2;
     }
 
     if (numJugagores == 2)
     {
-        numUnidadesPorJugador = 40;
+        infanteria = 40;
+        caballeria = 3;
+        artilleria = 2;
     }
 
-    while (!jugadoresAux.empty())
+    while (!this->Jugadores.empty()) //nunca seran mas de 6 jugadores
     {
-        Jugador jugador = jugadoresAux.front();
+        Jugador jugador = this->Jugadores.front();
 
-        jugadoresAux.pop();
+        this->Jugadores.pop();
+        int infanteriaActual = 0;
+        int caballeriActual = 0;
+        int artilleriaActual = 0;
 
-        int numUnidades = jugador.getNumUnidades();
 
-        while (numUnidades != numUnidadesPorJugador)
-        {
-                // Agregar unidades de acuerdo al numero de jugadores
-                // en una partida de 6 jugadores cada uno recibe 5 infanterias, 1 caballerias y 1 artillerias
-                // en una partida de 5 jugadores cada uno recibe 5 infanterias, 2 caballerias y 1 artillerias
-                // en una partida de 4 jugadores cada uno recibe 5 infanterias, 3 caballerias y 1 artillerias
-                // en una partida de 3 jugadores cada uno recibe 5 infanterias, 2 caballerias y 2 artillerias
-                // en una partida de 2 jugadores cada uno recibe 5 infanterias, 3 caballerias y 2 artillerias
+        for (int i = 0; i< this->tablero.getUnidadesInfanteria().size(); i++){
 
+                if(this->tablero.getUnidadesInfanteria()[i].getColor() == jugador.getColor() && infanteriaActual < infanteria){
+                    jugador.agregarUnidad(this->tablero.getUnidadesInfanteria()[i]);
+                }
+
+                if(this->tablero.getUnidadesCaballeria()[i].getColor() == jugador.getColor() && caballeriActual < caballeria){
+                    jugador.agregarUnidad(this->tablero.getUnidadesCaballeria()[i]);
+                }
+
+                if(this->tablero.getUnidadesArtilleria()[i].getColor() == jugador.getColor() && artilleriaActual < artilleria){
+                    jugador.agregarUnidad(this->tablero.getUnidadesArtilleria()[i]);
+                }
             
         }
         
-
-        jugadoresAux.push(jugador);
-    }
+        
+        this->Jugadores.push(jugador);
+    
     {
         
     }
 
 }
+}
 
 bool Partida::iniciarPartida() {
 
+    this->setCantJugadores();
+    this->repartirElementos();
     this->turno = Turno();
     this->turno.setNumTurno(1);
     this->turno.setJugador(this->Jugadores.front());
@@ -312,7 +342,9 @@ void Tablero::crearUnidades() {
         unidadesArtilleria.push_back(unidad);
     }
 
-
+    setUnidadesInfanteria(unidadesInfanteria);
+    setUnidadesCaballeria(unidadesCaballeria);
+    setUnidadesArtilleria(unidadesArtilleria);
     
 }
 
