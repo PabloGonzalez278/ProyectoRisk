@@ -34,8 +34,8 @@ void Unidad::setTipoUnidad(std::string tipoUnidad) {
     this->tipoUnidad = tipoUnidad;
 }
 
-void Unidad::setColor(std::string color) {
-    this->color = color;
+void Unidad::setColor(std::string colorAgregar) {
+    this->color = colorAgregar;
 }
 
 void Unidad::setValorUnidad(int valorUnidad) {
@@ -49,9 +49,6 @@ Jugador::Jugador() {
     this->color = "";
     this->id = 0;
     this->numUnidades = 0;
-    this->unidades = {};
-    this->tarjetas = {};
-    this->Territorios = {};
     this->numTarjetas = 0;
     this->numConquistas = 0;
 }
@@ -104,16 +101,20 @@ int Jugador::getNumConquistas() {
     return this->numConquistas;
 }
 
-void Jugador::setNombre(std::string nombre) {
-    this->nombre = nombre;
+void Jugador::setNombre(std::string nombreAgregar) {
+    this->nombre = nombreAgregar;
+  std::cout << "nombre: " << this->nombre << std::endl;
 }
 
 void Jugador::setColor(std::string color) {
+  
     this->color = color;
+  std::cout << "color: " << this->color << std::endl;
 }
 
-void Jugador::setId(int id) {
-    this->id = id;
+void Jugador::setId(int idn) {
+    this->id = idn;
+  std::cout << "id: " << this->id << std::endl;
 }
 
 void Jugador::setNumUnidades() {
@@ -183,15 +184,13 @@ Tarjeta Jugador::ObtenerTarjetasUnidad() {
 Territorio::Territorio() {
     this->nombre = "";
     this->continente = "";
-    this->vecinos = {};
     this->id = 0;
     this->numUnidades = 0;
 }
 
-Territorio::Territorio(std::string nombre, std::string continente, int id, int numUnidades) {
+Territorio::Territorio(std::string nombre, std::string continenteN, int id, int numUnidades) {
     this->nombre = nombre;
-    this->continente = continente;
-    this->vecinos = {};
+    this->continente = continenteN;
     this->id = id;
     this->numUnidades = numUnidades;
 }
@@ -216,8 +215,8 @@ int Territorio::getNumUnidades() {
     return this->numUnidades;
 }
 
-void Territorio::setNombre(std::string nombre) {
-    this->nombre = nombre;
+void Territorio::setNombre(std::string nombreAgregar) {
+    this->nombre = nombreAgregar;
 }
 
 void Territorio::setContinente(std::string continente) {
@@ -283,4 +282,3 @@ void Tarjeta::setTerritorio(std::string Territorio) {
 void Tarjeta::setUnidad(std::string unidad) {
     this->unidad = unidad;
 }
-

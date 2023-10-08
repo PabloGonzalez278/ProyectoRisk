@@ -4,7 +4,10 @@
 #define ELEMENTOS_JUEGO_H
 
 #include <string>
+#include <vector>
 
+class Territorio;
+class Tarjeta;
 
 class Unidad {
     public:

@@ -1,12 +1,14 @@
-#include "../juego/elementos-juego.h"
+#include "elementos-juego.h"
+#include <vector>
+#include <algorithm>
+#include <random>
 
 //Partida
 
 Partida::Partida() {
     this->cantJugadores = 0;
-    this->Jugadores = {};
-    this->turno = {};
-    this->tablero = {};
+    this->turno = Turno();
+    this->tablero = Tablero();
 }
 
 Partida::Partida(int cantJugadores, std::queue<Jugador> Jugadores, Turno turno) {
@@ -28,12 +30,12 @@ Turno Partida::getTurno() {
 }
 
 void Partida::setCantJugadores() {
-    cantJugadores = Jugadores.size();
-    this->cantJugadores = cantJugadores;
+    int numJugadores = this->Jugadores.size();
+    this->cantJugadores = numJugadores;
 }
 
-void Partida::setJugadores(std::queue<Jugador> Jugadores) {
-    this->Jugadores = Jugadores;
+void Partida::setJugadores(std::queue<Jugador> JugadoresAgregar) {
+    this->Jugadores = JugadoresAgregar;
 }
 
 void Partida::setTurno(Turno turno) {
@@ -52,10 +54,11 @@ void Partida::setTablero(Tablero tablero) {
     this->tablero = tablero;
 }
 
-Tablero Partida::crearTablero() {
+void Partida::crearTablero() {
     Tablero tablero = Tablero();
 
     setTablero(tablero);
+    std::cout << "tablero Creado"<< std::endl;
 }
 
 bool Partida::cargarPartida() {
@@ -82,18 +85,33 @@ void Partida::repartirElementos(){
 
 
 
-    for (size_t i = 0; i < numTerritorios; i++)
-    {
-        int numJugador = i%numJugagores;
+   // Baraja aleatoriamente la lista de territorios
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(territorios.begin(), territorios.end(), g);
 
-        Jugador jugador = this->Jugadores.front();
+    int territoriosPorJugador = numTerritorios / numJugagores;
+    int territoriosRestantes = numTerritorios % numJugagores;
 
-        this->Jugadores.pop();
+    std::queue<Jugador> jugadores = getJugadores();  // Usamos un vector para almacenar a los jugadores
+    Jugador jugadorTemp;  
 
-        jugador.reclamar(territorios[i]);
 
-        this->Jugadores.push(jugador);
+    for (size_t i = 0; i < numTerritorios; i++) {
+        jugadorTemp = jugadores.front();
+        jugadores.pop();
+        jugadorTemp.reclamar(territorios[i]);
+
+        // Avanzar al siguiente jugador
+        if (i == territoriosPorJugador - 1 && territoriosRestantes > 0) {
+            territoriosRestantes--;
+        }
+
+        jugadores.push(jugadorTemp);
     }
+
+    std::cout << "Territorios repartidos"<< std::endl;
+  
 
     //reparte las unidades
 
@@ -153,7 +171,7 @@ void Partida::repartirElementos(){
         artilleria = 2;
     }
 
-    while (!this->Jugadores.empty()) //nunca seran mas de 6 jugadores
+    for(int i = 0; i < numJugagores ; i++) //nunca seran mas de 6 jugadores
     {
         Jugador jugador = this->Jugadores.front();
 
@@ -187,11 +205,15 @@ void Partida::repartirElementos(){
     }
 
 }
+
+    std::cout << "Elementos repartidos"<< std::endl;
 }
 
 bool Partida::iniciarPartida() {
 
     this->setCantJugadores();
+
+    std::cout << "repartiendo"<< std::endl;
     this->repartirElementos();
     this->turno = Turno();
     this->turno.setNumTurno(1);
@@ -199,7 +221,6 @@ bool Partida::iniciarPartida() {
     this->Jugadores.pop();
     this->turno.setDefensor(this->Jugadores.front());
     this->Jugadores.push(this->turno.getJugador());
-
     this->turno.iniciarTurno();
 
     return true;
@@ -209,14 +230,13 @@ bool Partida::iniciarPartida() {
 //Tablero
 
 Tablero::Tablero() {
-    this->Territorios = {};
-    this->Tarjetas = {};
-    this->unidadesInfanteria = {};
-    this->unidadesArtilleria = {};
-    this->unidadesCaballeria = {};
+    this->crearTerritorios();
+    this->crearUnidades();
+    this->crearTarjetas();
+
 }
 
-Tablero::Tablero(std::vector<Territorio> Territorios, Partida partida, std::vector<Tarjeta> Tarjetas, std::vector<Unidad> unidadesInfanteria, std::vector<Unidad> unidadesArtilleria, std::vector<Unidad> unidadesCaballeria) {
+Tablero::Tablero(std::vector<Territorio> Territorios, std::vector<Tarjeta> Tarjetas, std::vector<Unidad> unidadesInfanteria, std::vector<Unidad> unidadesArtilleria, std::vector<Unidad> unidadesCaballeria) {
     this->Territorios = Territorios;
     this->Tarjetas = Tarjetas;
     this->unidadesInfanteria = unidadesInfanteria;
@@ -265,9 +285,9 @@ void Tablero::setUnidadesCaballeria(std::vector<Unidad> unidades) {
 }
 
 void Tablero::crearUnidades() {
-    std::vector<Unidad> unidadesInfanteria = {};
-    std::vector<Unidad> unidadesArtilleria = {};
-    std::vector<Unidad> unidadesCaballeria = {};
+    std::vector<Unidad> unidadesInfanteria;
+    std::vector<Unidad> unidadesArtilleria;
+    std::vector<Unidad> unidadesCaballeria;
 
     // habran 6 ciclo for, uno por cada color de unidad
     // cada ciclo for creara 3 unidades del mismo color
@@ -284,19 +304,19 @@ void Tablero::crearUnidades() {
         Unidad unidad = Unidad("Infanteria", "Rojo", 1);
         unidadesInfanteria.push_back(unidad);
 
-        Unidad unidad = Unidad("Infanteria", "Azul", 1);
+        unidad = Unidad("Infanteria", "Azul", 1);
         unidadesInfanteria.push_back(unidad);
 
-        Unidad unidad = Unidad("Infanteria", "Amarillo", 1);
+        unidad = Unidad("Infanteria", "Amarillo", 1);
         unidadesInfanteria.push_back(unidad);
 
-        Unidad unidad = Unidad("Infanteria", "Verde", 1);
+        unidad = Unidad("Infanteria", "Verde", 1);
         unidadesInfanteria.push_back(unidad);
 
-        Unidad unidad = Unidad("Infanteria", "Morado", 1);
+        unidad = Unidad("Infanteria", "Morado", 1);
         unidadesInfanteria.push_back(unidad);
 
-        Unidad unidad = Unidad("Infanteria", "Cafe", 1);
+        unidad = Unidad("Infanteria", "Cafe", 1);
         unidadesInfanteria.push_back(unidad);
 
 
@@ -346,12 +366,13 @@ void Tablero::crearUnidades() {
     setUnidadesCaballeria(unidadesCaballeria);
     setUnidadesArtilleria(unidadesArtilleria);
     
+    std::cout << "Unidades creadas"<< std::endl;
 }
 
 
 void Tablero::crearTerritorios() {
     
-        std::vector<Territorio> territorios = {};
+        std::vector<Territorio> territorios;
     
         //Territorios de America del Norte
         Territorio territorio = Territorio("Alaska", "America del Norte", 1, 0);
@@ -447,13 +468,15 @@ void Tablero::crearTerritorios() {
         territorio = Territorio("Australia Oriental", "Oceania", 41, 0);
         territorios.push_back(territorio);
 
-
+        std::cout << "Territorios creados"<< std::endl;
         
 }
 
-void Tablero::crearTarjetas(std::vector<Territorio> territorios) {
+void Tablero::crearTarjetas() {
 
 std::vector<Tarjeta> tarjetas;
+
+
 
 //cartas comodin
 Tarjeta tarjeta = Tarjeta("Comodin", "", "");
@@ -462,7 +485,7 @@ tarjetas.push_back(tarjeta);
 
 //cartas de territorio
 
-for (size_t i = 0; i < territorios.size(); i++)
+for (size_t i = 0; i < this->getTerritorios().size(); i++)
 {
 
     //variable que aleatoriamente escoge el tipo de unidad
@@ -470,23 +493,25 @@ for (size_t i = 0; i < territorios.size(); i++)
 
     if (tipoUnidad <= 5)
     {
-        tarjeta = Tarjeta("Territorio", territorios[i].getNombre(), "Infanteria");
+        tarjeta = Tarjeta("Territorio", this->getTerritorios()[i].getNombre(), "Infanteria");
     }
 
     if (tipoUnidad > 5 && tipoUnidad <= 8)
     {
-        tarjeta = Tarjeta("Territorio", territorios[i].getNombre(), "Caballeria");
+        tarjeta = Tarjeta("Territorio", this->getTerritorios()[i].getNombre(), "Caballeria");
     }
 
     if (tipoUnidad > 8)
     {
-        tarjeta = Tarjeta("Territorio", territorios[i].getNombre(), "Artilleria");
+        tarjeta = Tarjeta("Territorio", this->getTerritorios()[i].getNombre(), "Artilleria");
     }
 
 
     tarjetas.push_back(tarjeta);
 }
 
+setTarjetas(tarjetas);
+std::cout << "Tarjetas creadas"<< std::endl;
 
 }
 
@@ -562,14 +587,35 @@ int Turno::costoConquista() {
 std::string Turno::conquistaBarata() {
 }
 
+
+
+
+
 void Turno::iniciarTurno() {
+
+
+    std::cout << "Turno del Jugador " << this->getJugador().getId() << " iniciado." << std::endl;
+
+    // Busca al Jugador actual en el estado del juego
+    Jugador jugadorActual = this->getJugador();
+
+    
+    // Calcula y asigna las unidades adicionales al Jugador actual
+    
+
+    // Realiza los ataques y actualiza el estado del juego
+    atacar();
+
+    // Permite al Jugador fortificar sus territorios
+    fortificar();
+
+    // Actualiza el turno para el próximo Jugador
+    this->numTurno = this->numTurno +1;
+
+    // Muestra un mensaje indicando que el turno ha terminado
+    std::cout << "Turno del Jugador " << jugadorActual.getId() << " terminado." << std::endl;
+
 }
 
 int Turno::tiraDados(int numDados) {
 }
-
-
-
-
-
-
